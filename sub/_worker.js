@@ -243,7 +243,7 @@ export default {
 			
 			
 				
-				https://github.com/cmliu/WorkerVless2sub
+				
 				`;
 			
 				return new Response(responseText, {
