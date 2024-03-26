@@ -13,14 +13,13 @@ let addresses = [
 // 设置优选地址api接口
 let addressesapi = [
 	'https://raw.githubusercontent.com/LiJunYi2/WorkerVless2sub/main/addressesapi.txt',
-	// 'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressesapi.txt', //可参考内容格式 自行搭建。
 	'https://addressesapi.090227.xyz/CloudFlareYes',
+	'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressesipv6api.txt', //IPv6优选内容格式 自行搭建。
 ];
 
 let DLS = 4;//速度下限
 let addressescsv = [
 	'https://raw.githubusercontent.com/LiJunYi2/WorkerVless2sub/main/addressesapi.csv',
-	// 'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressescsv.csv', //iptest测速结果文件。
 ];
 
 let subconverter = "api.v1.mk"; //在线订阅转换后端，目前使用肥羊的订阅转换功能。支持自建psub 可自行搭建https://github.com/bulianglin/psub
@@ -53,7 +52,7 @@ let SUBUpdateTime = 6;
 let total = 99;//PB
 //let timestamp = now;
 let timestamp = 4102329600000;//2099-12-31
-
+const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[.*\]):?(\d+)?#?(.*)?$/;
 async function sendMessage(type, ip, add_data = "") {
 	if ( BotToken !== '' && ChatID !== ''){
 		let msg = "";
@@ -100,7 +99,7 @@ async function getAddressesapi(api) {
 			} else {
 				lines = text.split('\n');
 			}
-			const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(#.*)?$/;
+			//const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?(#.*)?$/;
 		
 			const apiAddresses = lines.map(line => {
 				const match = line.match(regex);
@@ -243,7 +242,7 @@ export default {
 			
 			
 				
-				
+				https://github.com/cmliu/WorkerVless2sub
 				`;
 			
 				return new Response(responseText, {
@@ -382,25 +381,34 @@ export default {
 					let port = "80";
 					let addressid = address;
 				
-					if (address.includes(':') && address.includes('#')) {
-						const parts = address.split(':');
-						address = parts[0];
-						const subParts = parts[1].split('#');
-						port = subParts[0];
-						addressid = subParts[1];
-					} else if (address.includes(':')) {
-						const parts = address.split(':');
-						address = parts[0];
-						port = parts[1];
-					} else if (address.includes('#')) {
-						const parts = address.split('#');
-						address = parts[0];
-						addressid = parts[1];
+					const match = addressid.match(regex);
+					if (!match) {
+						if (address.includes(':') && address.includes('#')) {
+							const parts = address.split(':');
+							address = parts[0];
+							const subParts = parts[1].split('#');
+							port = subParts[0];
+							addressid = subParts[1];
+						} else if (address.includes(':')) {
+							const parts = address.split(':');
+							address = parts[0];
+							port = parts[1];
+						} else if (address.includes('#')) {
+							const parts = address.split('#');
+							address = parts[0];
+							addressid = parts[1];
+						}
+					
+						if (addressid.includes(':')) {
+							addressid = addressid.split(':')[0];
+						}
+					} else {
+						address = match[1];
+						port = match[2];
+						addressid = match[3];
 					}
-				
-					if (addressid.includes(':')) {
-						addressid = addressid.split(':')[0];
-					}
+	
+					//console.log(address, port, addressid);
 
 					if (edgetunnel.trim() === 'cmliu' && RproxyIP.trim() === 'true') {
 					// 将addressid转换为小写
@@ -436,26 +444,35 @@ export default {
 				let port = "443";
 				let addressid = address;
 			
-				if (address.includes(':') && address.includes('#')) {
-					const parts = address.split(':');
-					address = parts[0];
-					const subParts = parts[1].split('#');
-					port = subParts[0];
-					addressid = subParts[1];
-				} else if (address.includes(':')) {
-					const parts = address.split(':');
-					address = parts[0];
-					port = parts[1];
-				} else if (address.includes('#')) {
-					const parts = address.split('#');
-					address = parts[0];
-					addressid = parts[1];
-				}
-			
-				if (addressid.includes(':')) {
-					addressid = addressid.split(':')[0];
-				}
+				const match = addressid.match(regex);
+				if (!match) {
+					if (address.includes(':') && address.includes('#')) {
+						const parts = address.split(':');
+						address = parts[0];
+						const subParts = parts[1].split('#');
+						port = subParts[0];
+						addressid = subParts[1];
+					} else if (address.includes(':')) {
+						const parts = address.split(':');
+						address = parts[0];
+						port = parts[1];
+					} else if (address.includes('#')) {
+						const parts = address.split('#');
+						address = parts[0];
+						addressid = parts[1];
+					}
 				
+					if (addressid.includes(':')) {
+						addressid = addressid.split(':')[0];
+					}
+				} else {
+					address = match[1];
+					port = match[2];
+					addressid = match[3];
+				}
+
+				//console.log(address, port, addressid);
+        
 				if (edgetunnel.trim() === 'cmliu' && RproxyIP.trim() === 'true') {
 					// 将addressid转换为小写
 					let lowerAddressid = addressid.toLowerCase();
