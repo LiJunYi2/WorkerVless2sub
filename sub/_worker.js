@@ -5,9 +5,11 @@ let mytoken= 'auto';//快速订阅访问入口, 留空则不启动快速订阅
 
 // 设置优选地址，不带端口号默认443，不支持非TLS订阅生成
 let addresses = [
-	'icook.tw:2053#优选域名',
-	'cloudflare.cfgo.cc#优选官方线路',
-	'185.221.160.203:443#电信优选IP',
+	'cf.090227.xyz:443#CM优选',
+	'icook.tw:443#优选域名',
+	'cloudflare.cfgo.cc:443#优选官方线路',
+	'icook.hk:443#香港',
+	'skk.moe:443#ssk优选'
 ];
 
 // 设置优选地址api接口
@@ -35,6 +37,27 @@ let proxyIPs = [
 	'proxyip.aliyun.fxxk.dedyn.io',
 	'proxyip.multacom.fxxk.dedyn.io',
 	'proxyip.vultr.fxxk.dedyn.io',
+	'ip.sb',
+	'api.ip.sb',
+	'hk.zh141.com',
+	'www.iios.club',
+	'www.wuda.cf',
+	'kr01.nttkk.com',
+	'tw04.nttkk.com',
+	'cdn.cf.clun.top',
+	'yecaoyun.com',
+	'www.k77kk.cc',
+	'www.yhth88.com',
+	'www.ikantv.net',
+	'6i5.com',
+	'xs.wxtv.cc',
+	'jp.anxray.top',
+	'cf-cdn.tiktokcloud.top',
+	'bestproxy.onecf.eu.org',
+	'acjp.cloudflarest.link',
+	'acsg2.cloudflarest.link',
+	'best.cdn.sqeven.cn'
+	
 ];
 let CMproxyIPs = [
 	{ proxyIP: "proxyip.fxxk.dedyn.io", type: "HK" },
@@ -404,8 +427,8 @@ export default {
 						}
 					} else {
 						address = match[1];
-						port = match[2];
-						addressid = match[3];
+						port = match[2] || port;
+						addressid = match[3] || address;
 					}
 	
 					//console.log(address, port, addressid);
@@ -467,8 +490,8 @@ export default {
 					}
 				} else {
 					address = match[1];
-					port = match[2];
-					addressid = match[3];
+					port = match[2] || port;
+					addressid = match[3] || address;
 				}
 
 				//console.log(address, port, addressid);
